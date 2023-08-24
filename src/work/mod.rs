@@ -34,6 +34,5 @@ pub trait Work:
         of_parent_work: Self,
     ) -> Self;
 
-    fn mul_f64(self, rhs: Self) -> f64;
     fn div_f64(self, rhs: Self) -> f64;
 }

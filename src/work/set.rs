@@ -79,10 +79,6 @@ where
         }
     }
 
-    fn mul_f64(self, _rhs: Self) -> f64 {
-        todo!()
-    }
-
     fn div_f64(self, _rhs: Self) -> f64 {
         todo!()
     }

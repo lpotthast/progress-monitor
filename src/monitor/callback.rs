@@ -3,7 +3,7 @@ use std::{
     fmt::{Debug, Display},
 };
 
-use crate::{prelude::SubMonitor, work::Work, CloseError};
+use crate::{prelude::ChildMonitor, work::Work, CloseError};
 
 use super::{ProgressMonitor, ProgressMonitorDivision};
 
@@ -12,7 +12,7 @@ pub struct CallbackProgressMonitor<'n, W: Work, C: Fn(&W, &W)> {
     work: W,
     work_done: W,
     callback: C,
-    closed: Option<Result<(), CloseError>>, // TODO: Box error, as erorr is unlikely?
+    closed: Option<Result<(), CloseError>>, // TODO: Box error, as error is unlikely?
 }
 
 impl<'n, W, C> Debug for CallbackProgressMonitor<'n, W, C>
@@ -116,14 +116,14 @@ where
         name: N,
         parent_work: A1,
         child_work: A2,
-    ) -> SubMonitor<'n, 'p, W, Self> {
+    ) -> ChildMonitor<'n, 'p, W, Self> {
         let parent_work: W = parent_work.into();
         let total_child_work: W = child_work.into();
 
         // TODO: As Result?
         assert!(&parent_work <= self.remaining().as_ref());
 
-        SubMonitor::new(name.into(), self, parent_work, total_child_work)
+        ChildMonitor::new(name.into(), self, parent_work, total_child_work)
     }
 }
 

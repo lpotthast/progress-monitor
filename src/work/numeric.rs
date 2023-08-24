@@ -32,10 +32,6 @@ impl Work for NumericWork {
         }
     }
 
-    fn mul_f64(self, rhs: Self) -> f64 {
-        self.0 as f64 * rhs.0 as f64
-    }
-
     fn div_f64(self, rhs: Self) -> f64 {
         self.0 as f64 / rhs.0 as f64
     }

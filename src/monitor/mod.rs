@@ -2,7 +2,7 @@ use std::{borrow::Cow, fmt::Debug, fmt::Display};
 
 use crate::{prelude::CloseError, work::Work};
 
-use self::sub::SubMonitor;
+use self::sub::ChildMonitor;
 
 pub mod callback;
 pub mod sub;
@@ -38,5 +38,5 @@ where
         name: N,
         parent_work: A1,
         total_child_work: A2,
-    ) -> SubMonitor<'n, 'p, W, Self>; // TODO: Return trait
+    ) -> ChildMonitor<'n, 'p, W, Self>; // TODO: Return trait
 }

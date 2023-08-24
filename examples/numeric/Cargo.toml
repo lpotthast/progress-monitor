@@ -1,0 +1,9 @@
+[package]
+name = "numeric"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+progress-monitor = { path = "../../" }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.17"

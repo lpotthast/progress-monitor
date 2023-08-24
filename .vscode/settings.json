@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "println"
+    ],
+    "rust-analyzer.linkedProjects": [
+        "./examples/numeric/Cargo.toml"
     ]
 }
