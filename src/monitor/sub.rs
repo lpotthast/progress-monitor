@@ -32,6 +32,10 @@ impl<'n, 'p, W: Work, P: ProgressMonitor<W>> SubMonitor<'n, 'p, W, P> {
             closed: None,
         }
     }
+
+    pub fn name(&self) -> Cow<'n, str> {
+        self.name.clone()
+    }
 }
 
 impl<'n, 'p, W: Work, P: ProgressMonitor<W>> ProgressMonitor<W> for SubMonitor<'n, 'p, W, P> {
