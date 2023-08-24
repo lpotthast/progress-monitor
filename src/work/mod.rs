@@ -25,7 +25,6 @@ pub trait Work:
 
     fn new<A: Into<Self::Type>>(value: A) -> Self;
     fn zero() -> Self;
-    fn is_zero(&self) -> bool;
     fn min<'a>(a: &'a Self, b: &'a Self) -> &'a Self;
 
     fn parent_work_done_when(

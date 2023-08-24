@@ -54,10 +54,6 @@ impl<T: SetReq> Work for SetWork<T> {
         SetWork(BTreeSet::new())
     }
 
-    fn is_zero(&self) -> bool {
-        self.0.is_empty()
-    }
-
     fn min<'a>(a: &'a Self, b: &'a Self) -> &'a Self {
         if a.0.len() < b.0.len() {
             a

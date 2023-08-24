@@ -26,10 +26,6 @@ impl<N: NumReq> Work for NumericWork<N> {
         Self::new(N::zero())
     }
 
-    fn is_zero(&self) -> bool {
-        N::is_zero(&self.0)
-    }
-
     fn min<'a>(a: &'a Self, b: &'a Self) -> &'a Self {
         if a.0 < b.0 {
             a
