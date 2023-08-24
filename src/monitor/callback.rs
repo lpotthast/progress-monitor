@@ -12,7 +12,7 @@ pub struct CallbackProgressMonitor<'n, W: Work, C: Fn(&W, &W)> {
     work: W,
     work_done: W,
     callback: C,
-    closed: Option<Result<(), CloseError>>, // TODO: Box error, as error is unlikely?
+    closed: Option<Result<(), CloseError>>,
 }
 
 impl<'n, W, C> Debug for CallbackProgressMonitor<'n, W, C>

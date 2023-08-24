@@ -32,7 +32,7 @@ pub struct ChildMonitor<'n, 'p, W: Work, P: ProgressMonitor<W>> {
     sub_work_completed: W,
     /// Tracks thr amount of work submitted to the parent. Must equal `parent_work` when closing this child monitor!
     parent_work_submitted: W,
-    closed: Option<Result<(), CloseError>>, // TODO: Box error, as erorr is unlikely?
+    closed: Option<Result<(), CloseError>>,
 }
 
 impl<'n, 'p, W: Work, P: ProgressMonitor<W>> ChildMonitor<'n, 'p, W, P> {
