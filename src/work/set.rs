@@ -63,11 +63,17 @@ impl<T: SetReq> Work for SetWork<T> {
     }
 
     fn parent_work_done_when(
-        _sub_work_done: Self,
+        sub_work_done: Self,
         _of_total_sub_work: Self,
-        _of_parent_work: Self,
+        of_parent_work: Self,
     ) -> Self {
-        todo!()
+        let mut partial = Self::zero();
+        for elem in sub_work_done.0.iter() {
+            if !of_parent_work.0.contains(elem) {
+                let _inserted = partial.0.insert(elem.clone());
+            }
+        }
+        partial
     }
 }
 
