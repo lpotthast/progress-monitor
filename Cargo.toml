@@ -1,12 +1,12 @@
 [package]
 name = "progress-monitor"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 rust-version = "1.60.0"
 authors = ["Lukas Potthast <privat@lukas-potthast.de>"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/lpotthast/leptonic"
+repository = "https://github.com/lpotthast/progress-monitor"
 description = """
 Track any progress.
 """
