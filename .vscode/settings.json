@@ -3,6 +3,7 @@
         "println"
     ],
     "rust-analyzer.linkedProjects": [
-        "./examples/numeric/Cargo.toml"
+        "./examples/numeric/Cargo.toml",
+        "./examples/set/Cargo.toml"
     ]
 }
