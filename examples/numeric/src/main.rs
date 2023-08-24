@@ -26,13 +26,14 @@ fn main() {
         |a: &SetWork<MyWork>, w: &SetWork<MyWork>| println!("{}/{}", w, a),
     );
 
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(500));
     mon.worked(MyWork::ResourcesLoaded);
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(500));
     mon.worked(MyWork::ConnectionEstablished);
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(500));
+    // Submitting the same work twice is not a problem when working with sets. Could be an opt-in though!
     mon.worked(MyWork::ConnectionEstablished);
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(500));
     mon.worked(MyWork::SystemInitialized);
     //let c = mon.new_child("sub", MyWork::SystemInitialized, MyWork::SystemInitialized);
 
@@ -43,18 +44,18 @@ fn main() {
             println!("{}/{}", w, a)
         });
     mon.worked(1);
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(500));
     mon.worked(99);
 
     {
         let mut sub = mon.new_child("a", 100, 5000);
-        thread::sleep(Duration::from_millis(500));
+        thread::sleep(Duration::from_millis(250));
         sub.worked(1000);
-        thread::sleep(Duration::from_millis(500));
+        thread::sleep(Duration::from_millis(250));
         sub.worked(1000);
-        thread::sleep(Duration::from_millis(500));
+        thread::sleep(Duration::from_millis(250));
         sub.worked(1000);
-        thread::sleep(Duration::from_millis(500));
+        thread::sleep(Duration::from_millis(250));
         sub.worked(1000);
         {
             let mut subsub = sub.new_child("b".to_string(), 1000, 11);
@@ -73,7 +74,7 @@ fn main() {
         sub.close().unwrap();
     }
 
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(Duration::from_millis(500));
     mon.worked(100);
     mon.close().unwrap();
 }
