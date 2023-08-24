@@ -51,14 +51,21 @@ where
     C: Fn(&W, &W),
 {
     fn worked<A: Into<W>>(&mut self, amount: A) {
-        let now = (self.work_done.clone() + amount.into()).unwrap(); // TODO: Handle error!
+        let amount: W = amount.into();
+        let now: W = (self.work_done.clone() + amount.clone()).expect("Addition to work"); // TODO: Handle error!?
         if now > self.work {
-            // TOOD: Handle overshoot: e.g. require Min trait implementation, return min(possibly_overshootet, max_work)
-            println!("now: {now:?}");
-            println!("work: {:?}", self.work);
-            panic!("");
+            // TODO: Control overshoot behavior through monitor configuration.
+            tracing::warn!(
+                work = ?self.work,
+                work_done = ?self.work_done,
+                new_work_done = ?amount,
+                would_become = ?now,
+                "Detected overshoot. Try to only submit work left open. Ignoring additional work."
+            );
+            self.work_done = self.work.clone();
+        } else {
+            self.work_done = now;
         }
-        self.work_done = now;
         (self.callback)(&self.work, &self.work_done);
     }
 

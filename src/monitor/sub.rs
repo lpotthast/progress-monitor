@@ -61,6 +61,14 @@ impl<'n, 'p, W: Work, P: ProgressMonitor<W>> ProgressMonitor<W> for ChildMonitor
         let now: W = (self.sub_work_completed.clone() + amount_of_work.clone()).unwrap();
         if now > self.sub_work {
             // Would overshoot! Just clamp to maximum work possible.
+            // TODO: Control overshoot behavior through monitor configuration.
+            tracing::warn!(
+                work = ?self.sub_work,
+                work_done = ?self.sub_work_completed,
+                new_work_done = ?amount_of_work,
+                would_become = ?now,
+                "Detected overshoot. Try to only submit work left open. Ignoring additional work."
+            );
             self.sub_work_completed = self.sub_work.clone();
         } else {
             self.sub_work_completed = now;

@@ -1,6 +1,6 @@
 [package]
 name = "progress-monitor"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
 rust-version = "1.60.0"
 authors = ["Lukas Potthast <privat@lukas-potthast.de>"]
@@ -15,4 +15,7 @@ keywords = ["progress", "monitor", "progress-monitor"]
 
 [dependencies]
 num = "0.4"
-tracing = "0.1.37"
+tracing = "0.1"
+
+[dev-dependencies]
+tracing-subscriber = "0.3"

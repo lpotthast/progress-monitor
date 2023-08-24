@@ -32,29 +32,19 @@ mod test {
         .expect("setting default subscriber failed");
 
         let mut mon =
-            CallbackProgressMonitor::new("root", 300, |a: &NumericWork, w: &NumericWork| {
+            CallbackProgressMonitor::new("root", 300, |a: &NumericWork<u64>, w: &NumericWork<u64>| {
                 tracing::info!("{}/{}", w, a)
             });
         mon.worked(100);
 
-        let mut sub = mon.new_child("a", 100, 5000);
+        let mut sub = mon.new_child("a", 100, 3000);
         sub.worked(1000);
         sub.worked(1000);
         sub.worked(1000);
-        sub.worked(1000);
-
-        //let mut subsub = sub.new_child("b", 1000, 10);
-        //subsub.worked(2);
-        //subsub.worked(2);
-        //subsub.worked(2);
-        //subsub.worked(2);
-        ////subsub.worked(2);
-        //drop(subsub);
-        tracing::info!("drop sub");
         sub.close().unwrap();
         drop(sub);
-        tracing::info!("dropped sub");
 
         mon.worked(120);
+        mon.close().unwrap();
     }
 }
