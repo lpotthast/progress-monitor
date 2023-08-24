@@ -23,7 +23,7 @@ fn main() {
     let mut mon = CallbackProgressMonitor::new(
         "root",
         &[MyWork::ResourcesLoaded, MyWork::SystemInitialized],
-        |a: &SetWork<MyWork>, w: &SetWork<MyWork>| println!("{}/{}", w, a),
+        |a: &SetWork<MyWork>, w: &SetWork<MyWork>| tracing::info!("{}/{}", w, a),
     );
 
     thread::sleep(Duration::from_millis(500));
@@ -41,7 +41,7 @@ fn main() {
 
     let mut mon =
         CallbackProgressMonitor::new("root", 300, |a: &NumericWork<u64>, w: &NumericWork<u64>| {
-            println!("{}/{}", w, a)
+            tracing::info!("{}/{}", w, a)
         });
     mon.worked(1);
     thread::sleep(Duration::from_millis(500));
