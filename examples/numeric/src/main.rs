@@ -38,9 +38,10 @@ fn main() {
 
     mon.close().unwrap();
 
-    let mut mon = CallbackProgressMonitor::new("root", 300, |a: &NumericWork, w: &NumericWork| {
-        println!("{}/{}", w, a)
-    });
+    let mut mon =
+        CallbackProgressMonitor::new("root", 300, |a: &NumericWork<u64>, w: &NumericWork<u64>| {
+            println!("{}/{}", w, a)
+        });
     mon.worked(1);
     thread::sleep(Duration::from_secs(1));
     mon.worked(99);

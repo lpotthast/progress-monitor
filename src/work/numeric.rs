@@ -1,30 +1,34 @@
 use std::{
+    fmt::Debug,
     fmt::Display,
     ops::{Add, Sub},
 };
 
+use num::{FromPrimitive, Num, ToPrimitive};
+
 use crate::work::{AddError, Work};
 
-// TODO: Make generic
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
-pub struct NumericWork(u64);
+pub struct NumericWork<N: Num + ToPrimitive>(N);
 
-impl Work for NumericWork {
-    type Type = u64;
+impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> Work
+    for NumericWork<N>
+{
+    type Type = N;
 
-    fn new<A: Into<Self::Type>>(value: A) -> NumericWork {
-        NumericWork(value.into())
+    fn new<A: Into<Self::Type>>(value: A) -> Self {
+        Self(value.into())
     }
 
-    fn zero() -> NumericWork {
-        NumericWork(0)
+    fn zero() -> Self {
+        Self::new(N::zero())
     }
 
     fn is_zero(&self) -> bool {
-        self.0 == 0
+        N::is_zero(&self.0)
     }
 
-    fn min<'a>(a: &'a NumericWork, b: &'a NumericWork) -> &'a NumericWork {
+    fn min<'a>(a: &'a Self, b: &'a Self) -> &'a Self {
         if a.0 < b.0 {
             a
         } else {
@@ -32,59 +36,51 @@ impl Work for NumericWork {
         }
     }
 
-    fn parent_work_done_when(sub_work_done: Self, of_total_sub_work: Self, of_parent_work: Self) -> Self {
-        NumericWork((sub_work_done.0 as f64 / of_total_sub_work.0  as f64 * of_parent_work.0 as f64) as u64)
+    fn parent_work_done_when(
+        sub_work_done: Self,
+        of_total_sub_work: Self,
+        of_parent_work: Self,
+    ) -> Self {
+        let sub_work_done = sub_work_done.0.to_f64().expect("representable as f64");
+        let of_total_sub_work = of_total_sub_work.0.to_f64().expect("representable as f64");
+        let of_parent_work = of_parent_work.0.to_f64().expect("representable as f64");
+
+        let rel = sub_work_done / of_total_sub_work * of_parent_work;
+
+        Self::new(N::from_f64(rel).expect("cast from f64 to N"))
     }
 }
 
-impl Display for NumericWork {
+impl<N: Num + ToPrimitive + Debug + Display + PartialOrd + Clone> Display for NumericWork<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("{}", self.0))
     }
 }
 
-impl Add for NumericWork {
+impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> Add
+    for NumericWork<N>
+{
     type Output = Result<Self, AddError>;
 
     fn add(self, rhs: Self) -> Self::Output {
-        Ok(Self(self.0 + rhs.0))
+        Ok(Self::new(self.0 + rhs.0))
     }
 }
 
-impl Sub for NumericWork {
+impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> Sub
+    for NumericWork<N>
+{
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
-        NumericWork(self.0 - rhs.0)
+        Self::new(self.0 - rhs.0)
     }
 }
 
-impl Into<NumericWork> for i32 {
-    fn into(self) -> NumericWork {
-        NumericWork(self as u64)
-    }
-}
-
-impl Into<NumericWork> for u32 {
-    fn into(self) -> NumericWork {
-        NumericWork(self as u64)
-    }
-}
-
-impl Into<NumericWork> for u64 {
-    fn into(self) -> NumericWork {
-        NumericWork(self)
-    }
-}
-
-impl From<f64> for NumericWork {
-    fn from(val: f64) -> Self {
-        NumericWork(val as u64)
-    }
-}
-
-impl From<NumericWork> for f64 {
-    fn from(val: NumericWork) -> Self {
-        val.0 as f64
+impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> From<N>
+    for NumericWork<N>
+{
+    fn from(value: N) -> Self {
+        Self::new(value)
     }
 }

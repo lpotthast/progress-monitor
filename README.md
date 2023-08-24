@@ -30,7 +30,7 @@ use progress_monitor::prelude::*;
 
 fn main() {
     // Numeric work
-    let mut mon = CallbackProgressMonitor::new("root", 300, |a: &NumericWork, w: &NumericWork| {
+    let mut mon = CallbackProgressMonitor::new("root", 300, |a: &NumericWork<u64>, w: &NumericWork<u64>| {
         println!("{}/{}", w, a)
     });
     mon.worked(1);
