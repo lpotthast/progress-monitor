@@ -6,33 +6,26 @@ use std::{
 
 use crate::work::{AddError, Work};
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-pub struct SetWork<T>(BTreeSet<T>)
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy;
+pub trait SetReq: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy {}
 
-impl<T> Display for SetWork<T>
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy> SetReq for T {}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+pub struct SetWork<T: SetReq>(BTreeSet<T>);
+
+impl<T: SetReq> Display for SetWork<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("{:?}", self.0))
     }
 }
 
-impl<T> From<SetWork<T>> for f64
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: SetReq> From<SetWork<T>> for f64 {
     fn from(val: SetWork<T>) -> Self {
         val.0.len() as f64
     }
 }
 
-impl<T> From<T> for SetWork<T>
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: SetReq> From<T> for SetWork<T> {
     fn from(value: T) -> Self {
         let mut set = BTreeSet::new();
         set.insert(value);
@@ -40,10 +33,7 @@ where
     }
 }
 
-impl<T, const N: usize> From<&[T; N]> for SetWork<T>
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: SetReq, const N: usize> From<&[T; N]> for SetWork<T> {
     fn from(value: &[T; N]) -> Self {
         let mut set = BTreeSet::new();
         for v in value {
@@ -53,10 +43,7 @@ where
     }
 }
 
-impl<T> Work for SetWork<T>
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: SetReq> Work for SetWork<T> {
     type Type = BTreeSet<T>;
 
     fn new<A: Into<Self::Type>>(value: A) -> Self {
@@ -88,10 +75,7 @@ where
     }
 }
 
-impl<T> Add for SetWork<T>
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: SetReq> Add for SetWork<T> {
     type Output = Result<Self, AddError>;
 
     fn add(mut self, mut rhs: Self) -> Self::Output {
@@ -109,10 +93,7 @@ where
     }
 }
 
-impl<T> Sub for SetWork<T>
-where
-    T: Debug + PartialEq + Eq + PartialOrd + Ord + Clone + Copy,
-{
+impl<T: SetReq> Sub for SetWork<T> {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {

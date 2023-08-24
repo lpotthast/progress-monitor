@@ -8,12 +8,12 @@ use num::{FromPrimitive, Num, ToPrimitive};
 
 use crate::work::{AddError, Work};
 
-trait NumReq: Num + ToPrimitive + FromPrimitive + PartialOrd + Debug + Display + Clone {}
+pub trait NumReq: Num + ToPrimitive + FromPrimitive + PartialOrd + Debug + Display + Clone {}
 
 impl<T: Num + ToPrimitive + FromPrimitive + PartialOrd + Debug + Display + Clone> NumReq for T {}
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
-pub struct NumericWork<N: Num + ToPrimitive>(N);
+pub struct NumericWork<N: NumReq>(N);
 
 impl<N: NumReq> Work for NumericWork<N> {
     type Type = N;
