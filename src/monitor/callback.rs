@@ -77,15 +77,6 @@ where
         Cow::Owned(self.work.clone() - self.work_done.clone())
     }
 
-    /// Retruns a percentage value ranging from 0.0 to 1.0.
-    fn get_relative_amount_of_work_completed(&self) -> f64 {
-        if self.work_done.is_zero() {
-            0.0
-        } else {
-            self.work.clone().div_f64(self.work_done.clone())
-        }
-    }
-
     fn close(&mut self) -> Result<(), crate::CloseError> {
         let work_left = self.remaining();
         let result = if work_left.as_ref() == &W::zero() {
@@ -136,7 +127,6 @@ impl<'n, W: Work, C: Fn(&W, &W)> Display for CallbackProgressMonitor<'n, W, C> {
 impl<'n, W: Work, C: Fn(&W, &W)> Drop for CallbackProgressMonitor<'n, W, C> {
     fn drop(&mut self) {
         match &self.closed {
-            // TODO: Replace closed with None variant, taking ownership of close result
             Some(result) => {
                 assert!(result.is_ok());
             }

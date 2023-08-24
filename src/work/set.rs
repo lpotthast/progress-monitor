@@ -79,10 +79,6 @@ where
         }
     }
 
-    fn div_f64(self, _rhs: Self) -> f64 {
-        todo!()
-    }
-
     fn parent_work_done_when(
         _sub_work_done: Self,
         _of_total_sub_work: Self,

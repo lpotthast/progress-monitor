@@ -7,9 +7,7 @@ use self::sub::ChildMonitor;
 pub mod callback;
 pub mod sub;
 
-// TODO: Impl addition / mult / div / min
-// TODO: Make get_relative_amount_of_work_completed a method of an additional trait
-
+/// A ProgressMonitor tracks an amount of work which must be completed.
 pub trait ProgressMonitor<W: Work>: Debug + Display {
     fn worked<A: Into<W>>(&mut self, amount_of_work: A);
 
@@ -19,9 +17,7 @@ pub trait ProgressMonitor<W: Work>: Debug + Display {
 
     fn remaining(&self) -> Cow<W>;
 
-    // TODO: remove this or move to own trait?
-    fn get_relative_amount_of_work_completed(&self) -> f64;
-
+    /// If you are done with your work, close this monitor.
     fn close(&mut self) -> Result<(), CloseError>;
 }
 
@@ -34,9 +30,13 @@ where
     A2: Into<W>,
 {
     fn new_child(
+        // A reference to the parent monitor.
         &'p mut self,
+        // The name of the child monitor. For debug purposes only.
         name: N,
+        // The amount of parent work this child monitor is responsible for. Must be <= the remaining work of the given parent!
         parent_work: A1,
-        total_child_work: A2,
-    ) -> ChildMonitor<'n, 'p, W, Self>; // TODO: Return trait
+        // The child monitors scale for the work taken from the parent monitor. Can be arbitrary.
+        child_work: A2,
+    ) -> ChildMonitor<'n, 'p, W, Self>;
 }

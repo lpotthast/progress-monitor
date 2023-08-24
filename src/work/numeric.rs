@@ -32,10 +32,6 @@ impl Work for NumericWork {
         }
     }
 
-    fn div_f64(self, rhs: Self) -> f64 {
-        self.0 as f64 / rhs.0 as f64
-    }
-
     fn parent_work_done_when(sub_work_done: Self, of_total_sub_work: Self, of_parent_work: Self) -> Self {
         NumericWork((sub_work_done.0 as f64 / of_total_sub_work.0  as f64 * of_parent_work.0 as f64) as u64)
     }

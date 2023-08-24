@@ -113,16 +113,6 @@ impl<'n, 'p, W: Work, P: ProgressMonitor<W>> ProgressMonitor<W> for ChildMonitor
         Cow::Owned(self.sub_work.clone() - self.sub_work_completed.clone())
     }
 
-    fn get_relative_amount_of_work_completed(&self) -> f64 {
-        if self.sub_work_completed.is_zero() {
-            0.0
-        } else {
-            self.sub_work
-                .clone()
-                .div_f64(self.sub_work_completed.clone())
-        }
-    }
-
     fn close(&mut self) -> Result<(), crate::CloseError> {
         if self.closed.is_none() {
             let work_left = self.remaining();
@@ -158,8 +148,6 @@ where
     ) -> ChildMonitor<'n, 'p, W, Self> {
         let amount_of_parent_work: W = amount_of_parent_work.into();
         let amount_of_child_work: W = amount_of_child_work.into();
-
-        // We have to check that the
 
         // TODO: As Result?
         assert!(&amount_of_parent_work <= self.remaining().as_ref());
