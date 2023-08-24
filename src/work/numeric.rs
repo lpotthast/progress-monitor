@@ -8,12 +8,14 @@ use num::{FromPrimitive, Num, ToPrimitive};
 
 use crate::work::{AddError, Work};
 
+trait NumReq: Num + ToPrimitive + FromPrimitive + PartialOrd + Debug + Display + Clone {}
+
+impl<T: Num + ToPrimitive + FromPrimitive + PartialOrd + Debug + Display + Clone> NumReq for T {}
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub struct NumericWork<N: Num + ToPrimitive>(N);
 
-impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> Work
-    for NumericWork<N>
-{
+impl<N: NumReq> Work for NumericWork<N> {
     type Type = N;
 
     fn new<A: Into<Self::Type>>(value: A) -> Self {
@@ -51,15 +53,13 @@ impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone
     }
 }
 
-impl<N: Num + ToPrimitive + Debug + Display + PartialOrd + Clone> Display for NumericWork<N> {
+impl<N: NumReq> Display for NumericWork<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("{}", self.0))
     }
 }
 
-impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> Add
-    for NumericWork<N>
-{
+impl<N: NumReq> Add for NumericWork<N> {
     type Output = Result<Self, AddError>;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -67,9 +67,7 @@ impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone
     }
 }
 
-impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> Sub
-    for NumericWork<N>
-{
+impl<N: NumReq> Sub for NumericWork<N> {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
@@ -77,9 +75,7 @@ impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone
     }
 }
 
-impl<N: Num + ToPrimitive + FromPrimitive + Debug + Display + PartialOrd + Clone> From<N>
-    for NumericWork<N>
-{
+impl<N: NumReq> From<N> for NumericWork<N> {
     fn from(value: N) -> Self {
         Self::new(value)
     }
